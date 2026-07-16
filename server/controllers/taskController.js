@@ -40,6 +40,11 @@ const getTaskById = async (req, res) => {
 const createTask = async (req, res) => {
   const { title, description, status, assignedTo, dueDate } = req.body;
 
+  // validating the incoming payload fields
+  if(!title?.trim() || !description?.trim()){
+    return res.status(400).json({message: 'Title and description cannot be empty'})
+  }
+
   try {
     const task = await Task.create({
       title,
