@@ -1,5 +1,6 @@
 ﻿import { reviewSubmission } from '../../api/submissions';
 
+
 const REVIEW_STATUS_CLASS = {
   Pending:  'status-badge-Submitted',
   Approved: 'status-badge-Approved',
@@ -9,6 +10,10 @@ const REVIEW_STATUS_CLASS = {
 const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
 
   const handleReview = async (status) => {
+    if(status === 'Rejected') {
+      const confirmed = window.confirm('Are you sure you want to reject this submission?')
+      if(!confirmed) return
+    }
     try {
       await reviewSubmission(submission._id, status);
       onReviewed();
@@ -17,8 +22,9 @@ const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
       alert(err.response?.data?.message || 'Review action failed');
     }
   };
+  
 
-  const task   = submission.taskId   || {};
+const task   = submission.taskId   || {};
   const talent = submission.talentId || {};
 
   return (
@@ -105,7 +111,7 @@ const SubmissionReviewModal = ({ submission, onClose, onReviewed }) => {
               className="flex-1 py-2.5 bg-bg-input text-text-muted border border-border rounded-lg text-sm font-medium cursor-pointer hover:bg-bg-hover hover:text-text-primary transition-all font-sans">
               Cancel
             </button>
-            <button onClick={() => handleReview('Rejected')}
+            <button onClick={() =>handleReview('Rejected')}
               className="flex-1 py-2.5 bg-danger/10 text-danger border border-danger/30 rounded-lg text-sm font-semibold cursor-pointer hover:bg-danger/20 transition-all font-sans">
               ✕ Reject
             </button>
