@@ -82,6 +82,11 @@ const getAllSubmissions = async (req, res) => {
 // @access Admin
 const reviewSubmission = async (req, res) => {
   const { reviewStatus } = req.body;
+  const allowedStatus = ['Approved', 'Rejected', 'Revision Requested']
+
+  if(!allowedStatus.includes(reviewStatus)) {
+    return res.status(400).json({message:'Invalid rebiew status.'})
+  }
 
   try {
     // — any string is accepted and stored
@@ -92,6 +97,11 @@ const reviewSubmission = async (req, res) => {
     )
       .populate('taskId', 'title status')
       .populate('talentId', 'name email');
+
+    //update the related task as well
+      await Task.findByIdAndUpdate(submission.taskId._id,{
+        status: reviewStatus === 'Revision Requested'?'Revision Requested':reviewStatus
+      })
 
     if (!submission) {
       return res.status(404).json({ message: 'Submission not found' });
