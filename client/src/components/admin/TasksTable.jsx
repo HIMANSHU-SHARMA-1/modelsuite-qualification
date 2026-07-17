@@ -1,5 +1,5 @@
 import { deleteTask } from '../../api/tasks';
-
+import Avatar from '../ui/Avatar';
 /* ── SVG Action Icons ── */
 const IconEdit = () => (
   <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -14,13 +14,15 @@ const IconDelete = () => (
 );
 
 /* ── Avatar color map ── */
-const AVATAR_COLORS = [
-  'linear-gradient(135deg,#3B82F6,#2563EB)',
-  'linear-gradient(135deg,#8B5CF6,#7C3AED)',
-  'linear-gradient(135deg,#10B981,#059669)',
-  'linear-gradient(135deg,#F59E0B,#D97706)',
-];
-const getAvatarGradient = (name = '') => AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+// they are no longer needed here since we created a resuable component for avatar handles
+
+// const AVATAR_COLORS = [
+//   'linear-gradient(135deg,#3B82F6,#2563EB)',
+//   'linear-gradient(135deg,#8B5CF6,#7C3AED)',
+//   'linear-gradient(135deg,#10B981,#059669)',
+//   'linear-gradient(135deg,#F59E0B,#D97706)',
+// ];
+// const getAvatarGradient = (name = '') => AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
 
 /* ── Date formatter ── */
 const fmtDate = (raw) => {
@@ -111,15 +113,7 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
               <td className="table-td" style={{ whiteSpace: 'nowrap' }}>
                 {task.assignedTo ? (
                   <div className="flex items-center gap-2">
-                    <div
-                      className="flex items-center justify-center text-[11px] font-bold text-white shrink-0"
-                      style={{
-                        width: '26px', height: '26px', borderRadius: '50%',
-                        background: getAvatarGradient(task.assignedTo.name || ''),
-                        fontFamily: 'Inter, sans-serif',
-                      }}>
-                      {task.assignedTo.name?.[0]?.toUpperCase()}
-                    </div>
+                   <Avatar name={task.assignedTo.name} size={26}/>
                     <span style={{ color: '#E5E2E1' }}>{task.assignedTo.name}</span>
                   </div>
                 ) : (
