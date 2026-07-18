@@ -28,6 +28,19 @@ const getTaskById = async (req, res) => {
 
     if (!task) return res.status(404).json({ message: 'Task not found' });
 
+      // Authorization check: Issue #7 (IDOR protection)
+    if(req.user.role === 'Talent'){
+      const isOpenTask = task.status === 'Open'
+
+      const isAssignedToCurrentUser = 
+      task.assignedTo && task.assignedTo._id.toString() === req.user._id.toString()
+
+      if(!isOpenTask && !isAssignedToCurrentUser){
+        return res.status(403).json({message:'Unauthorized Action'})
+      }
+
+    }
+
     res.json(task);
   } catch (error) {
     res.status(500).json({ message: error.message });
