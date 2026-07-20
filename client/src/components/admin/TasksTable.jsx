@@ -41,6 +41,7 @@ const STATUS_CLASS = {
   Submitted: 'status-badge-Submitted',
   Approved:  'status-badge-Approved',
   Rejected:  'status-badge-Rejected',
+  'Revision Requested': 'status-badge-Open',
 };
 
 const TasksTable = ({ tasks, onEdit, onRefresh }) => {
