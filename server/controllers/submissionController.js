@@ -21,9 +21,13 @@ const submitTask = async (req, res) => {
     let submission = await Submission.findOne({ taskId, talentId: req.user._id });
 
     if (submission) {
+      if(submission.reviewStatus !== 'Revision Requested') {
+        return res.status(400).json({message: 'Task has already been submitted'})
+      }
       // Overwrite: update in place
       submission.fileUrl = fileUrl;
       submission.notes = notes;
+      submission.reviewStatus = 'Pending'
       await submission.save();
     } else {
       submission = await Submission.create({
